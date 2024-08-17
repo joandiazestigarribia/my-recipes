@@ -13,38 +13,43 @@ interface RecipeDetailsProps {
 }
 
 const RecipeDetails = ({ recipe, isOpen, closeModal }: RecipeDetailsProps) => {
+    const { path } = recipe;
     const [recipeDetails, setRecipeDetails] = useState<any>(null);
     const keysToShow = {
         Duracion: 'Preparation time',
         Raciones: 'Number of servings',
         Ingredientes: 'Ingredients'
-    };
+    }
+
+    useEffect(() => {
+        if (isOpen) {
+            fetchRecipesDetails(path).then((details) => {
+                setRecipeDetails(details);
+            }).catch((error) => {
+                console.log("Error fetching:", error)
+            })
+        }
+    }, [isOpen])
 
     const renderValue = (key: string, value: any) => {
         if (Array.isArray(value)) {
             return (
                 <ul>
                     {value.map((item, index) => (
-                        <li key={index}>{item}</li>
+                        <li key={index}>
+                            {item}
+                        </li>
                     ))}
                 </ul>
-            );
+            )
         } else if (typeof value === 'object') {
             return JSON.stringify(value);
         } else {
             return value.toString();
         }
-    };
+    }
 
-    useEffect(() => {
-        if (isOpen) {
-            fetchRecipesDetails().then(details => {
-                setRecipeDetails(details);
-            }).catch(error => {
-                console.error("Error fetching recipe details:", error);
-            });
-        }
-    }, [isOpen]);
+
     return (
         <>
             <Transition appear show={isOpen} as={Fragment}>
@@ -99,14 +104,20 @@ const RecipeDetails = ({ recipe, isOpen, closeModal }: RecipeDetailsProps) => {
                                             {recipe.title}
                                         </h2>
                                         <div className='mt-3 flex flex-wrap gap-4'>
-                                            {recipeDetails && Object.entries(keysToShow).map(([key, displayName]) => (
-                                                recipeDetails[key] && (
-                                                    <div className='flex flex-col gap-2 w-full' key={key}>
-                                                        <h4 className='text-gray capitalize font-bold'>{displayName}</h4>
-                                                        <div className='text-black-100'>{renderValue(key, recipeDetails[key])}</div>
-                                                    </div>
-                                                )
-                                            ))}
+                                            {
+                                                recipeDetails && Object.entries(keysToShow).map(([key, displayName]) => (
+                                                    recipeDetails[key] && (
+                                                        <div className='flex flex-col gap-2 w-full' key={key}>
+                                                            <h4 className='text-gray capitalize font-bold'>
+                                                                {displayName}
+                                                            </h4>
+                                                            <div className='text-black-100'>
+                                                                {renderValue(key, recipeDetails[key])}
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                ))
+                                            }
                                         </div>
                                     </div>
                                 </DialogPanel>

@@ -1,9 +1,11 @@
-import { RecipeCard, CustomFilter, SearchBar } from "@/components";
+import { SearchBar } from "@/components";
 import Hero from "@/components/Hero";
-import { fetchRecipes } from "@/utils";
+import LoadingData from "@/components/LoadingData";
+import { HomeProps } from "@/types";
 
-export default async function Home() {
-  const allRecipes = await fetchRecipes();
+export default async function Home({ searchParams }: HomeProps) {
+
+
   return (
     <main className="overflow-hidden">
       <div className="">
@@ -15,17 +17,9 @@ export default async function Home() {
           </div>
           <div className="home__filters">
             <SearchBar />
-            <div className="home__filter-container">
-              <CustomFilter /* title="fuel" options=""*//>
-              <CustomFilter /* title="year" options=""*//>
-            </div>
           </div>
           <section>
-            <div className="home__cars-wrapper">
-              {allRecipes.map((recipe) => (
-                <RecipeCard recipe={recipe}/>
-              ))}
-            </div>
+            <LoadingData searchParams={searchParams} />
           </section>
         </div>
       </div>

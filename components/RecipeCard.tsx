@@ -11,7 +11,7 @@ interface RecipeCardProps {
 }
 
 const RecipeCard = ({ recipe }: RecipeCardProps) => {
-    const { image, title, newCategory } = recipe;
+    const { image, title, newCategory, path } = recipe;
     const [IsOpen, setIsOpen] = useState(false)
     return (
         <div className='recipe-card group'>

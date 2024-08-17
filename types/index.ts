@@ -12,7 +12,8 @@ export interface CustomButtonProps {
 export interface RecipeProps {
     image: string,
     title: string,
-    newCategory: string
+    newCategory: string,
+    path: string
 }
 
 export interface RecipeDetailsPreparation {
@@ -20,4 +21,14 @@ export interface RecipeDetailsPreparation {
     instructions: string[],
     servings: number,
     prepTime: string
+}
+
+export interface FilterProps {
+    newCategory?: string;
+    query?: string;
+    page?: number;
+}
+
+export interface HomeProps {
+    searchParams: FilterProps;
 }
